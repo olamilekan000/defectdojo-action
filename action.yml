@@ -1,0 +1,98 @@
+name: "DefectDojo Action"
+description: "Import scans and manage products/engagements in DefectDojo"
+inputs:
+  defectdojo_url:
+    description: "DefectDojo instance URL"
+    required: true
+  api_key:
+    description: "DefectDojo API Key"
+    required: true
+  file:
+    description: "Path to the scan file"
+    required: true
+  scan_type:
+    description: "Type of scan (e.g., Trivy Scan, ZAP Scan)"
+    required: true
+  product_name:
+    description: "Name of the product (used if product_id is not provided)"
+    required: false
+  product_id:
+    description: "ID of existing product"
+    required: false
+  engagement_name:
+    description: "Name of the engagement (used if engagement_id is not provided)"
+    required: false
+  engagement_id:
+    description: "ID of existing engagement"
+    required: false
+  product_type:
+    description: "Product Type ID (default: 1)"
+    required: false
+    default: "1"
+  product_description:
+    description: "Product Description"
+    required: false
+    default: "Created by DefectDojo Action"
+  minimum_severity:
+    description: "Minimum severity to import (Info, Low, Medium, High, Critical)"
+    required: false
+    default: "Info"
+  verified:
+    description: "Mark findings as verified"
+    required: false
+    default: "true"
+  active:
+    description: "Mark findings as active"
+    required: false
+    default: "true"
+  close_old_findings:
+    description: "Close old findings (reimport)"
+    required: false
+    default: "false"
+  commit_hash:
+    description: "Commit Hash"
+    required: false
+  branch_tag:
+    description: "Branch or Tag"
+    required: false
+  version:
+    description: "Version"
+    required: false
+
+outputs:
+  product_id:
+    description: "Product ID"
+  engagement_id:
+    description: "Engagement ID"
+  test_id:
+    description: "Test ID"
+  response:
+    description: "Raw API Response"
+
+runs:
+  using: "composite"
+  steps:
+    - run: ${{ github.action_path }}/entrypoint.sh
+      shell: bash
+      env:
+        INPUT_DEFECTDOJO_URL: ${{ inputs.defectdojo_url }}
+        INPUT_API_KEY: ${{ inputs.api_key }}
+        INPUT_FILE: ${{ inputs.file }}
+        INPUT_SCAN_TYPE: ${{ inputs.scan_type }}
+        INPUT_PRODUCT_NAME: ${{ inputs.product_name }}
+        INPUT_PRODUCT_ID: ${{ inputs.product_id }}
+        INPUT_ENGAGEMENT_NAME: ${{ inputs.engagement_name }}
+        INPUT_ENGAGEMENT_ID: ${{ inputs.engagement_id }}
+        INPUT_PRODUCT_TYPE: ${{ inputs.product_type }}
+        INPUT_PRODUCT_DESCRIPTION: ${{ inputs.product_description }}
+        INPUT_MINIMUM_SEVERITY: ${{ inputs.minimum_severity }}
+        INPUT_VERIFIED: ${{ inputs.verified }}
+        INPUT_ACTIVE: ${{ inputs.active }}
+        INPUT_CLOSE_OLD_FINDINGS: ${{ inputs.close_old_findings }}
+        INPUT_COMMIT_HASH: ${{ inputs.commit_hash }}
+        INPUT_BRANCH_TAG: ${{ inputs.branch_tag }}
+        INPUT_VERSION: ${{ inputs.version }}
+
+branding:
+  icon: "shield"
+  color: "blue"
